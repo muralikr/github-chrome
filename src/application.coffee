@@ -10,6 +10,7 @@ class @GithubChrome extends Backbone.View
 
   initialize: (@options) ->
     @repositories = new RepoCollection
+    @milestones = new MilestoneCollection
     @render()
     @storage = chrome.storage.local
 
@@ -51,6 +52,20 @@ class @GithubChrome extends Backbone.View
         @repositories.fetch
           reset: true
           error: @renderErrors
+          success: (repos) =>
+            #todo = repos.models;
+            for repo in repos.models
+              url = repo.get('milestones_url').replace(/{.*/,'')
+              collection = new MilestoneCollection
+                  url: url
+              collection.fetch
+                success: (coll)=>
+                  #todo.splice(todo.indexOf(repo), 1)
+                  #@reposView.collection.trigger("all-done") if todo.length == 0
+                  console.dir(coll);
+                  repo.set('milestone_collection',coll);
+                error: @renderErrors
+#	          - milestone_collection = repository.get('milestone_collection')
 
         @orgs = new OrgCollection
         @orgs.fetch

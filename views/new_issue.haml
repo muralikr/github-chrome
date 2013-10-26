@@ -6,6 +6,7 @@
       - for repository in @repositories.models
         - full_name = repository.get('full_name')
         - if localStorage['new_issue_last_repo'] == repository.get('full_name')
+          - milestone_collection = repository.get('milestone_collection')
           %option{value: full_name, selected: 'selected'}= repository.get('full_name')
         - else
           %option{value: full_name}= repository.get('full_name')
@@ -14,6 +15,25 @@
     %label{for: "title"} Title:
     %input{name: "title", type: "text", value: ""}
 
+  %section.assign-select
+    %label{for: "assignee"} Assignee
+    %select{name: 'assignee'}
+      - for repository in @repositories.models
+        - full_name = repository.get('full_name')
+        - if localStorage['new_issue_last_repo'] == repository.get('full_name')
+          %option{value: full_name, selected: 'selected'}= repository.get('full_name')
+        - else
+          %option{value: full_name}= repository.get('full_name')
+
+  %section.milestone-select
+    %label{for: "milestone"} Milestone
+    %select{name: 'milestone'}
+      - for milestone in milestone_collection.models
+        - title = milestone.get('title')
+        - console.log(title)
+        %option{value: title}= milestone.get('title')
+
+  %section
   %section
     %label{for: "body"} Comment:
     %textarea{name: "body", value: ""}
