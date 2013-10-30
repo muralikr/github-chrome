@@ -4,6 +4,7 @@ class @NewIssueView extends Backbone.View
 
   events:
     "submit form" : "onSubmit"
+    "change select[name=repository]" : "onRepoChange"
 
   initialize: (@options) ->
     @repositories = @options.repositories
@@ -11,6 +12,13 @@ class @NewIssueView extends Backbone.View
   render: ->
     @$el.html(HAML['new_issue'](repositories: @repositories))
     @$('select').select2()
+
+  onRepoChange: (e) ->
+    e.preventDefault()
+    name = @$("[name=repository]").val()
+    localStorage['new_issue_last_repo'] = name
+    @render()
+    return;
 
   onSubmit: (e) ->
     e.preventDefault()

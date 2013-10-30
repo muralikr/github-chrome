@@ -53,18 +53,17 @@ class @GithubChrome extends Backbone.View
           reset: true
           error: @renderErrors
           success: (repos) =>
-            #todo = repos.models;
             for repo in repos.models
               url = repo.get('milestones_url').replace(/{.*/,'')
               collection = new MilestoneCollection
                   url: url
               collection.fetch
                 success: (coll)=>
-                  #todo.splice(todo.indexOf(repo), 1)
-                  #@reposView.collection.trigger("all-done") if todo.length == 0
-                  console.dir(coll);
-                  repo.set('milestone_collection',coll);
+                  repo_name = coll._url.split('/').slice(4,6).join('/');
+                  current_repo = repos.find (r) -> r.get('full_name') == repo_name
+                  current_repo.set('milestone_collection',coll);
                 error: @renderErrors
+            @reposView.collection.add(repos.models, silent: true)
 #	          - milestone_collection = repository.get('milestone_collection')
 
         @orgs = new OrgCollection
