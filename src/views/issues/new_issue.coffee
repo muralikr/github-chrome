@@ -10,6 +10,8 @@ class @NewIssueView extends Backbone.View
     @repositories = @options.repositories
     todo = @repositories.models.length
     @repositories.each (model) =>
+      if !localStorage['new_issue_last_repo']
+        localStorage['new_issue_last_repo'] = model.get('full_name')
       model.setAssignee() if !model.get('assignee')
       if !model.get('milestone_collection')
         mile_stones = model.milestones()
