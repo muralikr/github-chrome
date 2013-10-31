@@ -8,6 +8,19 @@ class @NewIssueView extends Backbone.View
 
   initialize: (@options) ->
     @repositories = @options.repositories
+    todo = @repositories.models.length
+    @repositories.each (model) =>
+      model.setAssignee() if !model.get('assignee')
+      if !model.get('milestone_collection')
+        mile_stones = model.milestones()
+        mile_stones.fetch
+          success: (collection) => 
+            model.set('milestone_collection',collection)
+            todo--
+            @render() if todo == 0
+      else
+        todo--
+        @render() if todo == 0
 
   render: ->
     @$el.html(HAML['new_issue'](repositories: @repositories))

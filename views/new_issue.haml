@@ -7,7 +7,7 @@
         - full_name = repository.get('full_name')
         - if localStorage['new_issue_last_repo'] == repository.get('full_name')
           - milestone_collection = repository.get('milestone_collection')
-          - console.log(repository)
+          - assignee_collection = repository.get('assignee')
           %option{value: full_name, selected: 'selected'}= repository.get('full_name')
         - else
           %option{value: full_name}= repository.get('full_name')
@@ -19,19 +19,16 @@
   %section.assign-select
     %label{for: "assignee"} Assignee
     %select{name: 'assignee'}
-      - for repository in @repositories.models
-        - full_name = repository.get('full_name')
-        - if localStorage['new_issue_last_repo'] == repository.get('full_name')
-          %option{value: full_name, selected: 'selected'}= repository.get('full_name')
-        - else
-          %option{value: full_name}= repository.get('full_name')
+      - for assignee in assignee_collection.models
+        - title = assignee.get('login')
+        - if title != 'git-admin'
+          %option{value: title}= assignee.get('login')
 
   %section.milestone-select
     %label{for: "milestone"} Milestone
     %select{name: 'milestone'}
       - for milestone in milestone_collection.models
         - title = milestone.get('title')
-        - console.log(title)
         %option{value: title}= milestone.get('title')
 
   %section

@@ -5,3 +5,9 @@ class @Repo extends Backbone.Model
   milestonesUrl: -> [@get("html_url"), "milestones"].join("/")
   pullRequests: ->
     new PullRequestsCollection(this)
+  milestones: ->
+    mile_stones = new MilestoneCollection(this)
+  setAssignee: ->
+    assignee = new UserCollection()
+    assignee.add(@get('owner'))
+    @set('assignee', assignee)
